@@ -7,10 +7,12 @@ SPT(Single Player Tarkov)용 **다른 사람이 만든 모드**를 직접 풀어
 
 - 분석은 모드 DLL을 디컴파일해서 코드와 설정 설명을 직접 확인한 결과입니다.
 - FPS 같은 수치는 따로 측정했다고 적힌 경우에만 측정한 값입니다.
-- 각 보고서는 한국어(`ko.md`), 영어(`en.md`), 보기 좋은 페이지(`report.html`)로 같은 내용을 담습니다.
+- 각 보고서는 한국어·영어 전환 버튼이 있는 웹페이지입니다.
+
+**웹사이트로 보기: https://danyhappy564-cmyk.github.io/SPT-UserModIntel/**
 
 ## 보고서 목록
 
 | 날짜 | 모드 | 게임 빌드 | 한 줄 결론 |
 |---|---|---|---|
-| 2026-11-07 | [FuckThisCulling 0.4.1 · Fuck These Optics 0.3.2](reports/2026-11-07-FuckThisCulling-FuckTheseOptics/ko.md) | SPT 4.1 (EFT 0.16.9.40743) | 둘 다 그리기만 바꾸는 모드. SAIN과 함께 사용 가능, Fuck These Optics는 PiP-Disabler와 함께 쓰지 말 것 |
+| 2026-11-07 | [FuckThisCulling 0.4.1 · Fuck These Optics 0.3.2](https://danyhappy564-cmyk.github.io/SPT-UserModIntel/reports/2026-11-07-FuckThisCulling-FuckTheseOptics/#ko) | SPT 4.1 (EFT 0.16.9.40743) | 둘 다 그리기만 바꾸는 모드. SAIN과 함께 사용 가능, Fuck These Optics는 PiP-Disabler와 함께 쓰지 말 것 |

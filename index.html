@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SPT-UserModIntel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column; intro, then one row per review (newest first). Same tokens as the review pages. */
+*, *::before, *::after { box-sizing: border-box; }
+:root {
+  --bg: #f3f4f1; --surface: #ffffff; --fg: #1d2421; --muted: #5a6560; --line: #d6dbd6;
+  --accent: #3f6b4f; --warn: #9a5b00; --warn-bg: #fbf1df; --bad: #a3322a; --bad-bg: #f8e5e3;
+  --good: #2f6b3f; --good-bg: #e3f0e6;
+  --font-body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151a18; --surface: #1c2320; --fg: #e3e8e4; --muted: #9aa69f; --line: #2e3833;
+    --accent: #8cc49d; --warn: #e6b45a; --warn-bg: #2e2617; --bad: #f08a80; --bad-bg: #321d1b;
+    --good: #8cc49d; --good-bg: #1b2d21; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151a18; --surface: #1c2320; --fg: #e3e8e4; --muted: #9aa69f; --line: #2e3833;
+  --accent: #8cc49d; --warn: #e6b45a; --warn-bg: #2e2617; --bad: #f08a80; --bad-bg: #321d1b;
+  --good: #8cc49d; --good-bg: #1b2d21; color-scheme: dark;
+}
+[hidden] { display: none !important; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body);
+  font-size: 16px; line-height: 1.7;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+header { display: flex; flex-direction: column; gap: 12px; }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.lang button { font: 500 13px var(--font-mono); padding: 6px 14px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.lang button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+h1 { font-size: clamp(28px, 6vw, 38px); line-height: 1.2; margin: 0; font-weight: 700; }
+h2 { font-size: 15px; margin: 0; color: var(--muted); font-weight: 500; letter-spacing: .04em; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 62ch; }
+ul.rules { margin: 0; padding-left: 1.2em; color: var(--muted); font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+.list { display: flex; flex-direction: column; border-top: 2px solid var(--fg); }
+.item { display: grid; grid-template-columns: 110px 1fr; gap: 4px 20px; padding: 18px 0; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
+.item:hover .t, .item:focus-visible .t { color: var(--accent); text-decoration: underline; }
+.item:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.date { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 3px; }
+.body { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.t { font-size: 18px; font-weight: 700; line-height: 1.4; }
+.sub { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.v { font-size: 15px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.ok { background: var(--good-bg); color: var(--good); }
+.mid { background: var(--warn-bg); color: var(--warn); }
+.no { background: var(--bad-bg); color: var(--bad); }
+@media (max-width: 520px) { .item { grid-template-columns: 1fr; } }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===================== KOREAN ===================== -->
+<div data-lang="ko" class="wrap">
+<header>
+  <div class="topbar">
+    <span class="kicker">SPT 모드 분석 모음</span>
+    <div class="lang" role="group" aria-label="언어">
+      <button type="button" id="btn-ko-1" data-set="ko">한국어</button>
+      <button type="button" id="btn-en-1" data-set="en">English</button>
+    </div>
+  </div>
+  <h1>SPT-UserModIntel</h1>
+  <p class="lede">SPT(싱글 플레이어 타르코프)용으로 다른 사람이 만든 모드를 직접 풀어 보고 정리한 분석문입니다. 모드가 실제로 무엇을 하는지, 장점과 단점, 다른 모드와 같이 써도 되는지를 쉬운 말로 씁니다.</p>
+  <ul class="rules">
+    <li>모드 DLL을 디컴파일해서 코드와 설정 설명을 직접 확인한 결과입니다.</li>
+    <li>FPS 같은 수치는 측정했다고 적힌 경우에만 측정한 값입니다.</li>
+  </ul>
+</header>
+
+<section style="display:flex;flex-direction:column;gap:12px">
+  <h2>분석 목록</h2>
+  <div class="list">
+    <a class="item" href="reports/2026-11-07-FuckThisCulling-FuckTheseOptics/index.html#ko">
+      <span class="date">2026-11-07</span>
+      <span class="body">
+        <span class="t">FuckThisCulling · Fuck These Optics</span>
+        <span class="sub">0.4.1 · 0.3.2 · rootdarkarchon · SPT 4.1 (EFT 0.16.9.40743)</span>
+        <span class="v">둘 다 화면에 그리는 방식만 바꾸는 모드입니다. 하나는 가려진 물체를 안 그려 FPS를 올리고, 하나는 총·스코프 떨림을 없앱니다.</span>
+        <span class="tags"><span class="pill ok">SAIN과 사용 가능</span><span class="pill no">FTO + PiP-Disabler 함께 쓰지 말 것</span></span>
+      </span>
+    </a>
+  </div>
+</section>
+
+<footer>소스: <a href="https://github.com/danyhappy564-cmyk/SPT-UserModIntel">github.com/danyhappy564-cmyk/SPT-UserModIntel</a></footer>
+</div>
+
+<!-- ===================== ENGLISH ===================== -->
+<div data-lang="en" class="wrap" hidden>
+<header>
+  <div class="topbar">
+    <span class="kicker">SPT mod reviews</span>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="btn-ko-2" data-set="ko">한국어</button>
+      <button type="button" id="btn-en-2" data-set="en">English</button>
+    </div>
+  </div>
+  <h1>SPT-UserModIntel</h1>
+  <p class="lede">Plain-language reviews of other people's mods for SPT (Single Player Tarkov). Each one explains what a mod actually does, its pros and cons, and whether it works with other mods.</p>
+  <ul class="rules">
+    <li>Based on decompiling the mod DLLs and reading the code and setting descriptions directly.</li>
+    <li>Numbers such as FPS are measured only where a review says so.</li>
+  </ul>
+</header>
+
+<section style="display:flex;flex-direction:column;gap:12px">
+  <h2>Reviews</h2>
+  <div class="list">
+    <a class="item" href="reports/2026-11-07-FuckThisCulling-FuckTheseOptics/index.html#en">
+      <span class="date">2026-11-07</span>
+      <span class="body">
+        <span class="t">FuckThisCulling · Fuck These Optics</span>
+        <span class="sub">0.4.1 · 0.3.2 · rootdarkarchon · SPT 4.1 (EFT 0.16.9.40743)</span>
+        <span class="v">Both only change how things are drawn. One skips hidden objects for more FPS; the other removes gun and scope jitter.</span>
+        <span class="tags"><span class="pill ok">Works with SAIN</span><span class="pill no">Do not combine FTO with PiP-Disabler</span></span>
+      </span>
+    </a>
+  </div>
+</section>
+
+<footer>Source: <a href="https://github.com/danyhappy564-cmyk/SPT-UserModIntel">github.com/danyhappy564-cmyk/SPT-UserModIntel</a></footer>
+</div>
+
+</div>
+<script>
+(function () {
+  var views = document.querySelectorAll('[data-lang]');
+  function show(lang) {
+    if (lang !== 'en') lang = 'ko';
+    views.forEach(function (v) { v.hidden = v.getAttribute('data-lang') !== lang; });
+    document.querySelectorAll('[data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-set') === lang ? 'true' : 'false');
+    });
+    document.documentElement.lang = lang;
+  }
+  document.querySelectorAll('[data-set]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var l = b.getAttribute('data-set');
+      show(l);
+      try { history.replaceState(null, '', '#' + l); } catch (e) {}
+    });
+  });
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+  var start = '';
+  try { start = location.hash.slice(1); } catch (e) {}
+  show(start);
+})();
+</script>
+</body>
+</html>
