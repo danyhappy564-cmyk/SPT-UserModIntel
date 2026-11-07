@@ -1,0 +1,429 @@
+<title>FTC &amp; FTO 모드 분석</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~70ch), summary table first, then one section per mod, then compatibility + advice. */
+:root {
+  --bg: #f3f4f1;
+  --surface: #ffffff;
+  --fg: #1d2421;
+  --muted: #5a6560;
+  --line: #d6dbd6;
+  --accent: #3f6b4f;
+  --warn: #9a5b00;
+  --warn-bg: #fbf1df;
+  --bad: #a3322a;
+  --bad-bg: #f8e5e3;
+  --good: #2f6b3f;
+  --good-bg: #e3f0e6;
+  --font-body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151a18; --surface: #1c2320; --fg: #e3e8e4; --muted: #9aa69f; --line: #2e3833;
+    --accent: #8cc49d; --warn: #e6b45a; --warn-bg: #2e2617; --bad: #f08a80; --bad-bg: #321d1b;
+    --good: #8cc49d; --good-bg: #1b2d21; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151a18; --surface: #1c2320; --fg: #e3e8e4; --muted: #9aa69f; --line: #2e3833;
+  --accent: #8cc49d; --warn: #e6b45a; --warn-bg: #2e2617; --bad: #f08a80; --bad-bg: #321d1b;
+  --good: #8cc49d; --good-bg: #1b2d21; color-scheme: dark;
+}
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body);
+  font-size: 16px; line-height: 1.7;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+[hidden] { display: none !important; }
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+header { display: flex; flex-direction: column; gap: 12px; }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.lang button {
+  font: 500 13px var(--font-mono); padding: 6px 14px; border: 0; background: var(--surface);
+  color: var(--muted); cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.lang button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+h1 { font-size: clamp(26px, 5vw, 34px); line-height: 1.25; margin: 0; text-wrap: balance; font-weight: 700; }
+h2 { font-size: 22px; margin: 0; text-wrap: balance; }
+h3 { font-size: 16px; margin: 0; color: var(--accent); }
+p { margin: 0; }
+.lede { color: var(--muted); }
+.meta { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 16px; }
+section > .block { display: flex; flex-direction: column; gap: 8px; }
+.modhead { display: flex; flex-direction: column; gap: 4px; border-top: 2px solid var(--fg); padding-top: 16px; }
+.ver { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+ol { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 6px; }
+code, .num { font-family: var(--font-mono); font-size: .9em; }
+.num { font-variant-numeric: tabular-nums; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 520px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-size: 13px; color: var(--muted); font-weight: 500; }
+td:first-child { font-weight: 500; white-space: nowrap; }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; margin-right: 6px; white-space: nowrap; }
+.ok { background: var(--good-bg); color: var(--good); }
+.mid { background: var(--warn-bg); color: var(--warn); }
+.no { background: var(--bad-bg); color: var(--bad); }
+.note { background: var(--warn-bg); border-left: 3px solid var(--warn); padding: 12px 16px; border-radius: 0 6px 6px 0; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+.two > div { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 600px) { .two { grid-template-columns: 1fr; } }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+</style>
+
+<div class="wrap">
+
+<!-- ===================== KOREAN ===================== -->
+<div data-lang="ko" class="wrap" style="gap:40px">
+<header>
+  <div class="topbar">
+    <span class="kicker">SPT 4.1 · 모드 분석</span>
+    <div class="lang" role="group" aria-label="언어">
+      <button type="button" id="btn-ko-1" data-set="ko">한국어</button>
+      <button type="button" id="btn-en-1" data-set="en">English</button>
+    </div>
+  </div>
+  <h1>FuckThisCulling · Fuck These Optics 분석</h1>
+  <p class="lede">두 모드가 정확히 무엇을 하는지, 무엇이 좋고 무엇을 조심해야 하는지, 다른 모드와 같이 써도 되는지를 정리했습니다. 모드 파일(DLL)을 직접 풀어서 코드와 설정 설명을 확인한 결과입니다.</p>
+  <p class="meta">제작자 rootdarkarchon · MIT 라이선스 · 대상 게임 빌드 EFT 0.16.9.40743 (SPT 4.1) · 분석 2026-11-07</p>
+</header>
+
+<section>
+  <h2>한눈에 보기</h2>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th>FuckThisCulling 0.4.1</th><th>Fuck These Optics 0.3.2</th></tr></thead>
+    <tbody>
+      <tr><td>종류</td><td>성능(FPS) 모드</td><td>화질·조준 안정 모드</td></tr>
+      <tr><td>하는 일</td><td>화면에서 가려져 안 보이는 물체를 그리지 않습니다</td><td>맵 외곽에서 총·조준경이 떨리는 현상을 없애고, 스코프 화면을 선명하게 합니다</td></tr>
+      <tr><td>바꾸는 것</td><td>그려지는 물체의 수</td><td>내 손·총·스코프를 그리는 방식</td></tr>
+      <tr><td>안 바꾸는 것</td><td>충돌, 총알, 봇 시야, 루팅</td><td>탄도, 반동, 봇, 다른 캐릭터</td></tr>
+      <tr><td>위험도</td><td><span class="pill mid">중간</span>물체 늦게 나타남, 그림자 손실</td><td><span class="pill mid">중간~높음</span>게임 엔진 직접 수정, PiP-Disabler와 충돌</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="modhead"><h2>FuckThisCulling</h2><span class="ver">버전 0.4.1 · 파일: FuckThisCulling.dll, FuckThisCullingTiming.dll(측정용), fuckthisculling(셰이더 묶음)</span></div>
+
+  <div class="block">
+    <h3>무엇을 고치나</h3>
+    <p>타르코프에는 벽 뒤 물체를 숨기는 기능(Perfect Culling)이 원래 있습니다. 개발사가 맵을 작은 칸으로 나누고 "이 칸에 서 있으면 이 물체들이 보인다"는 표를 미리 만들어 둔 방식입니다. 이 표는 대략적이라, 실제로는 벽에 가려진 물체도 많이 그립니다. 그만큼 그래픽 카드가 헛일을 합니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>어떻게 작동하나</h3>
+    <p>미리 만든 표 대신, <b>지금 화면을 보고</b> 판단합니다(Hi-Z 컬링).</p>
+    <ol>
+      <li>매 프레임, 그래픽 카드가 방금 그린 화면의 "깊이"(각 픽셀이 얼마나 멀리 있는지)를 작게 줄인 지도로 만듭니다.</li>
+      <li>각 물체를 감싸는 상자를 그 지도와 비교합니다. 상자 전체가 벽보다 뒤에 있으면 "가려짐"입니다.</li>
+      <li><span class="num">8</span>번 연속으로 가려짐이 나와야 숨깁니다. 한 번이라도 보이면 바로 다시 그립니다. DLSS·FSR·TAA의 화면 흔들림도 고려합니다.</li>
+      <li>레이드 로딩 중에 맵 물체를 등록하고, 배치 카운트다운 때 켜집니다. 레이드가 끝나면 원래 방식으로 돌아가고, 오류가 나면 스스로 꺼집니다.</li>
+    </ol>
+    <p>숨길 때는 물체의 "그리기"만 끕니다. 충돌·총알 판정·봇 시야는 그대로입니다. 봇·플레이어 캐릭터와 내 총은 다른 물체를 가리는 벽으로 치지 않습니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>기본으로 켜져 있는 추가 기능 (알아 둘 것)</h3>
+    <ul>
+      <li><b>먼 작은 물체 숨기기</b>: <span class="num">75 m</span>보다 멀고 지름 <span class="num">0.5 m</span> 이하인 물체는 가려졌는지 확인하지 않고 숨깁니다.</li>
+      <li><b>먼 디테일 숨기기</b>: <span class="num">50 m</span>보다 멀고 화면에서 <span class="num">16</span>픽셀 이하로 보이는 물체는, 거의 다 가려지면 숨깁니다(약 <span class="num">8</span>픽셀 틈은 무시).</li>
+      <li><b>먼 얼룩(데칼) 숨기기</b>: <span class="num">100 m</span>보다 먼 벽 얼룩·자국은 절반 이상 가려지면 숨깁니다.</li>
+      <li><b>등 뒤 숨기기</b>(실험): 시야 양옆 <span class="num">30°</span> 밖, 뒤쪽 물체를 천천히 숨깁니다. <span class="num">50 m</span> 안의 물체, 루트, 문, 창문은 제외입니다.</li>
+      <li><b>LOD 묶음 끄기</b>(실험): 전부 숨겨진 지 <span class="num">0.75</span>초가 지난 물체 묶음은 거리별 모델 계산까지 멈춥니다.</li>
+      <li><b>그림자 유지는 꺼져 있습니다</b>: 숨긴 물체의 그림자도 같이 사라질 수 있습니다.</li>
+      <li>유리창, 바닥 루트, 움직이는 물체(문 등)도 숨김 대상입니다.</li>
+    </ul>
+  </div>
+
+  <div class="two">
+    <div>
+      <h3>장점</h3>
+      <ul>
+        <li>그리는 물체가 줄어 FPS가 오를 수 있습니다. 실내와 구조물이 많은 맵에서 효과가 큽니다.</li>
+        <li>숨기기 전에 여러 번 확인하고, 보이면 즉시 되돌립니다.</li>
+        <li>실패하면 원래 컬링으로 자동 복귀합니다.</li>
+        <li>성능 그래프와 벤치마크 도구가 들어 있습니다.</li>
+        <li>게임 판정(충돌, 총알, AI)은 건드리지 않습니다.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>단점·주의</h3>
+      <ul>
+        <li>0.4 초기 버전이고, 실험 기능과 설정이 매우 많습니다.</li>
+        <li>30° 넘게 빠르게 돌거나 문을 피킹할 때 물체가 늦게 나타날 수 있습니다. 가까운 물체를 항상 그리는 "근접 구역"은 기본으로 꺼져 있습니다(<span class="num">0 m</span>).</li>
+        <li>멀리 있는 작은 물체는 실제로 보이는데도 사라질 수 있습니다(설정 설명에도 적혀 있습니다).</li>
+        <li>그림자가 사라질 수 있습니다.</li>
+        <li>레이드 도중에 켜면 한 번 크게 끊깁니다.</li>
+        <li>게임 내부 컬링 관리자를 가로채므로, 게임 업데이트 때 깨지기 쉽습니다.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="modhead"><h2>Fuck These Optics</h2><span class="ver">버전 0.3.2 · 파일: FuckTheseOptics.dll, FuckTheseOpticsNative.dll(엔진 훅), fucktheseoptics_opticlock(셰이더 묶음)</span></div>
+
+  <div class="block">
+    <h3>무엇을 고치나</h3>
+    <ul>
+      <li><b>먼 곳에서의 떨림</b>: 게임은 위치를 소수 약 7자리 정밀도(float)로 계산합니다. 맵 중심에서 수백 m 떨어지면 정밀도가 모자라서, 내 총·손·스코프가 미세하게 떨리고 약 <span class="num">600 m</span>에서는 툭툭 튀어 보입니다.</li>
+      <li><b>흐린 스코프</b>: 원래 스코프 화면은 따로 찍은 사진을 나중에 붙이는 방식입니다. DLSS·FSR·TAA를 쓰면 이 부분이 번지고 흐려집니다.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>어떻게 작동하나 (기능 4개, 앞의 3개는 기본으로 켜짐)</h3>
+    <ol>
+      <li><b>카메라 기준 그리기</b>: 내 손과 총을 그릴 때 위치를 카메라 기준, 더 정밀한 숫자(double)로 계산합니다. 이를 위해 게임 엔진 파일(<code>UnityPlayer.dll</code>)의 코드를 메모리에서 직접 고쳐 끼웁니다.</li>
+      <li><b>정밀 자세 계산</b>: 무기 자세와 조준 카메라 위치 계산을 정밀하게 바꿉니다. <b>내 캐릭터에만</b> 적용되고, 결과 자세는 원래와 같습니다(반올림 차이만 있음).</li>
+      <li><b>픽셀 고정 스코프</b>: 스코프 화면을 메인 화면 픽셀과 1:1로 맞춰, 업스케일러(DLSS 등) 처리 전에 합칩니다. 움직임 정보도 함께 넘겨서 선명하게 보입니다. 야시경·열상·도트사이트는 원래 방식을 유지합니다.</li>
+      <li><b>진단용 화면 기록</b>(기본 꺼짐): 개발자 확인용입니다.</li>
+    </ol>
+    <p>Fika 헤드리스 서버에서는 스스로 꺼집니다.</p>
+  </div>
+
+  <div class="two">
+    <div>
+      <h3>장점</h3>
+      <ul>
+        <li>큰 맵 외곽에서 총·스코프가 떨리는 현상이 줄어듭니다.</li>
+        <li>DLSS·FSR·TAA를 쓸 때 스코프 화질이 좋아집니다.</li>
+        <li>조준점·탄도는 바뀌지 않습니다. 떨림만 사라집니다.</li>
+        <li>설정에서 끄면 다음 프레임부터 원래대로 돌아갑니다.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>단점·주의</h3>
+      <ul>
+        <li>D3D11과 게임 빌드 <span class="num">40743</span> 전용입니다. 게임 업데이트 때 가장 먼저 깨질 모드입니다.</li>
+        <li>엔진 코드를 직접 고치므로, 문제가 생기면 원인을 찾기 어렵습니다.</li>
+        <li><b>PiP-Disabler와 같은 스코프·무기 코드를 고칩니다.</b> 함께 쓰지 않는 것이 안전합니다.</li>
+        <li>스코프 화질 향상은 TAA·DLSS·FSR를 쓸 때 주로 느껴집니다.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>다른 모드와 같이 써도 되나</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>같이 쓰는 모드</th><th>FuckThisCulling</th><th>Fuck These Optics</th></tr></thead>
+    <tbody>
+      <tr><td>SAIN (zzap 포함)</td><td><span class="pill ok">가능</span>봇 시야는 충돌체 기준이라, 그리기를 꺼도 영향이 없습니다</td><td><span class="pill ok">가능</span>내 캐릭터에만 적용됩니다</td></tr>
+      <tr><td>Tushonka Cleaner</td><td><span class="pill mid">가능성 높음</span>투숀카는 물체 자체를 끄고, 이 모드는 그리기만 끕니다. 이미 꺼진 물체는 건너뜁니다. 게임 안 시험은 아직입니다</td><td><span class="pill ok">가능</span>겹치는 부분이 없습니다</td></tr>
+      <tr><td>PiP-Disabler</td><td><span class="pill ok">겹침 없음</span>코드상 겹치는 대상이 없습니다(게임 안 시험 전)</td><td><span class="pill no">함께 쓰지 말 것</span>둘 다 스코프와 무기 자세 코드를 고칩니다</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>추천</h2>
+  <ul>
+    <li><b>FPS가 목적이면</b> FuckThisCulling 하나부터 시험합니다. 물체가 늦게 뜨거나 그림자가 사라지면, 실험 기능("등 뒤 숨기기", "먼 작은 물체 숨기기")부터 끕니다.</li>
+    <li><b>Fuck These Optics</b>는 PiP-Disabler를 쓰지 않는 사람에게만 권합니다. 큰 맵 외곽에서 총이 떨리거나, DLSS로 스코프가 흐린 사람에게 맞습니다.</li>
+    <li>문제가 생기면 F12 설정 창(ConfigurationManager)에서 끄면 됩니다. FuckThisCulling은 <code>Enable HiZ culling</code>, Fuck These Optics는 기능별 <code>Enabled</code>입니다.</li>
+  </ul>
+  <p class="note">이 문서는 코드를 읽고 분석한 결과입니다. 실제 FPS 향상 폭은 측정하지 않았고, 맵과 PC 사양에 따라 다릅니다.</p>
+</section>
+
+<footer>
+  <p>분석 방법: 두 모드의 DLL을 ilspycmd로 디컴파일해서, 패치 대상·설정 기본값·설정 설명문을 직접 확인했습니다.</p>
+  <p>대상: FuckThisCulling 0.4.1, Fuck These Optics 0.3.2 · 게임 EFT 0.16.9.40743 (SPT 4.1).</p>
+</footer>
+</div>
+
+<!-- ===================== ENGLISH ===================== -->
+<div data-lang="en" class="wrap" style="gap:40px" hidden>
+<header>
+  <div class="topbar">
+    <span class="kicker">SPT 4.1 · Mod review</span>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="btn-ko-2" data-set="ko">한국어</button>
+      <button type="button" id="btn-en-2" data-set="en">English</button>
+    </div>
+  </div>
+  <h1>FuckThisCulling and Fuck These Optics, explained</h1>
+  <p class="lede">What the two mods actually do, what is good about them, what to watch out for, and whether they work with other mods. Based on decompiling the mod DLLs and reading the code and setting descriptions directly.</p>
+  <p class="meta">Author rootdarkarchon · MIT license · Game build EFT 0.16.9.40743 (SPT 4.1) · Reviewed 2026-11-07</p>
+</header>
+
+<section>
+  <h2>At a glance</h2>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th>FuckThisCulling 0.4.1</th><th>Fuck These Optics 0.3.2</th></tr></thead>
+    <tbody>
+      <tr><td>Type</td><td>Performance (FPS) mod</td><td>Image quality / aim stability mod</td></tr>
+      <tr><td>What it does</td><td>Stops drawing objects that are hidden behind walls</td><td>Removes gun and scope jitter far from the map centre and makes the scope image sharper</td></tr>
+      <tr><td>Changes</td><td>How many objects get drawn</td><td>How your hands, gun and scope are drawn</td></tr>
+      <tr><td>Does not change</td><td>Collisions, bullets, bot vision, looting</td><td>Ballistics, recoil, bots, other characters</td></tr>
+      <tr><td>Risk</td><td><span class="pill mid">Medium</span>Late pop-in, missing shadows</td><td><span class="pill mid">Medium–high</span>Patches the game engine, clashes with PiP-Disabler</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="modhead"><h2>FuckThisCulling</h2><span class="ver">Version 0.4.1 · Files: FuckThisCulling.dll, FuckThisCullingTiming.dll (timing), fuckthisculling (shader bundle)</span></div>
+
+  <div class="block">
+    <h3>What problem it solves</h3>
+    <p>Tarkov already hides objects behind walls with a system called Perfect Culling. The developers split each map into small cells and pre-computed a table that says "from this cell, these objects can be seen". The table is coarse, so the game still draws many objects that are actually behind walls, and the graphics card does wasted work.</p>
+  </div>
+
+  <div class="block">
+    <h3>How it works</h3>
+    <p>Instead of the pre-made table, it decides from <b>what is on screen right now</b> (Hi-Z culling).</p>
+    <ol>
+      <li>Every frame, the graphics card turns the depth of the frame it just drew (how far away each pixel is) into a small depth map.</li>
+      <li>Each object's bounding box is compared against that map. If the whole box is behind a wall, the object is "occluded".</li>
+      <li>An object is hidden only after <span class="num">8</span> occluded results in a row. A single visible result draws it again immediately. It also accounts for DLSS, FSR and TAA camera jitter.</li>
+      <li>It registers the map's objects while the raid loads and switches on at the deployment countdown. When the raid ends it returns to the normal system, and on an error it turns itself off.</li>
+    </ol>
+    <p>Hiding only turns off drawing. Collisions, bullet hits and bot vision stay the same. Bots, players and your own gun are never treated as walls that hide other objects.</p>
+  </div>
+
+  <div class="block">
+    <h3>Extra features that are on by default</h3>
+    <ul>
+      <li><b>Small distant objects</b>: objects farther than <span class="num">75 m</span> and at most <span class="num">0.5 m</span> across are hidden without an occlusion check.</li>
+      <li><b>Distant details</b>: objects farther than <span class="num">50 m</span> that look <span class="num">16</span> pixels or smaller on screen are hidden when almost fully covered (gaps of about <span class="num">8</span> pixels are ignored).</li>
+      <li><b>Distant decals</b>: stains and marks farther than <span class="num">100 m</span> are hidden when at least half covered.</li>
+      <li><b>Hide objects behind you</b> (experimental): slowly hides objects behind you, outside your view plus <span class="num">30°</span> on each side. Objects within <span class="num">50 m</span>, loot, doors and windows are excluded.</li>
+      <li><b>Disable hidden LOD groups</b> (experimental): once a whole group has been hidden for <span class="num">0.75</span> s, Unity stops its level-of-detail work too.</li>
+      <li><b>Shadow preservation is off</b>: shadows of hidden objects can disappear along with them.</li>
+      <li>Glass panes, ground loot and moving objects such as doors are also covered.</li>
+    </ul>
+  </div>
+
+  <div class="two">
+    <div>
+      <h3>Pros</h3>
+      <ul>
+        <li>Fewer objects drawn can mean higher FPS, especially on maps with many interiors and structures.</li>
+        <li>It checks several times before hiding and restores immediately when something becomes visible.</li>
+        <li>On failure it falls back to the normal culling.</li>
+        <li>Built-in performance graphs and a benchmark tool.</li>
+        <li>Does not touch gameplay (collisions, bullets, AI).</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Cons and cautions</h3>
+      <ul>
+        <li>Early 0.4 release with many experimental features and settings.</li>
+        <li>Objects can pop in late when you turn faster than about 30° or peek through doors. The "near zone" that always draws nearby objects is off by default (<span class="num">0 m</span>).</li>
+        <li>Small distant objects can disappear even when they are actually visible (the setting descriptions say so).</li>
+        <li>Shadows can disappear.</li>
+        <li>Turning it on in the middle of a raid causes one big stutter.</li>
+        <li>It intercepts the game's internal culling manager, so a game update can break it easily.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="modhead"><h2>Fuck These Optics</h2><span class="ver">Version 0.3.2 · Files: FuckTheseOptics.dll, FuckTheseOpticsNative.dll (engine hook), fucktheseoptics_opticlock (shader bundle)</span></div>
+
+  <div class="block">
+    <h3>What problem it solves</h3>
+    <ul>
+      <li><b>Jitter far from the centre</b>: the game stores positions with about 7 digits of precision (float). A few hundred metres from the map centre that precision runs out, so your gun, hands and scope shake slightly, and around <span class="num">600 m</span> they visibly snap.</li>
+      <li><b>Blurry scopes</b>: the scope image is normally rendered separately and pasted in afterwards. With DLSS, FSR or TAA that area smears and blurs.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>How it works (four features; the first three are on by default)</h3>
+    <ol>
+      <li><b>Camera-relative drawing</b>: your hands and gun are drawn with positions relative to the camera, computed with higher precision (double). To do this it patches the game engine (<code>UnityPlayer.dll</code>) in memory.</li>
+      <li><b>Precise pose math</b>: the weapon pose and the aiming camera position are computed more precisely. This applies <b>only to your own character</b>, and the resulting pose is the same apart from rounding.</li>
+      <li><b>Pixel-locked optics</b>: the scope image is aligned 1:1 with the main screen's pixels and blended in before the upscaler (DLSS and others), along with motion data, so it stays sharp. Night-vision, thermal and red-dot sights keep the normal path.</li>
+      <li><b>Diagnostic frame capture</b> (off by default): for the developer.</li>
+    </ol>
+    <p>On a Fika headless server it turns itself off.</p>
+  </div>
+
+  <div class="two">
+    <div>
+      <h3>Pros</h3>
+      <ul>
+        <li>Less gun and scope shake on the outer parts of large maps.</li>
+        <li>Sharper scope image with DLSS, FSR or TAA.</li>
+        <li>Point of aim and ballistics do not change; only the jitter goes away.</li>
+        <li>Turning a feature off restores the original behaviour from the next frame.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Cons and cautions</h3>
+      <ul>
+        <li>D3D11 and game build <span class="num">40743</span> only. It will likely be the first mod to break on a game update.</li>
+        <li>Because it patches engine code directly, problems are hard to trace.</li>
+        <li><b>It patches the same scope and weapon code as PiP-Disabler.</b> Using both is not safe.</li>
+        <li>The scope clarity gain is mostly noticeable with TAA, DLSS or FSR.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Compatibility with other mods</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Used with</th><th>FuckThisCulling</th><th>Fuck These Optics</th></tr></thead>
+    <tbody>
+      <tr><td>SAIN (incl. zzap)</td><td><span class="pill ok">OK</span>Bot vision uses colliders, so turning off drawing has no effect on it</td><td><span class="pill ok">OK</span>Only affects your own character</td></tr>
+      <tr><td>Tushonka Cleaner</td><td><span class="pill mid">Likely OK</span>Tushonka switches objects off entirely; this mod only stops drawing them and skips objects that are already off. Not yet tested in game</td><td><span class="pill ok">OK</span>No overlap</td></tr>
+      <tr><td>PiP-Disabler</td><td><span class="pill ok">No overlap</span>No shared targets in the code (not yet tested in game)</td><td><span class="pill no">Do not combine</span>Both patch the scope and weapon pose code</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Recommendation</h2>
+  <ul>
+    <li><b>If you want FPS</b>, try FuckThisCulling on its own first. If objects pop in late or shadows go missing, turn off the experimental features first ("Hide objects behind you", "Small distant objects").</li>
+    <li><b>Fuck These Optics</b> is only for players who do not use PiP-Disabler. It suits you if your gun shakes on the edges of big maps or your scope looks blurry with DLSS.</li>
+    <li>If something goes wrong, turn it off in the F12 settings window (ConfigurationManager): <code>Enable HiZ culling</code> for FuckThisCulling, and each feature's <code>Enabled</code> for Fuck These Optics.</li>
+  </ul>
+  <p class="note">This review is based on reading the code. The actual FPS gain was not measured and depends on the map and your PC.</p>
+</section>
+
+<footer>
+  <p>Method: both DLLs were decompiled with ilspycmd, and the patch targets, setting defaults and setting descriptions were checked directly.</p>
+  <p>Versions: FuckThisCulling 0.4.1, Fuck These Optics 0.3.2 · Game EFT 0.16.9.40743 (SPT 4.1).</p>
+</footer>
+</div>
+
+</div>
+
+<script>
+(function () {
+  var views = document.querySelectorAll('[data-lang]');
+  function show(lang) {
+    if (lang !== 'en') lang = 'ko';
+    views.forEach(function (v) { v.hidden = v.getAttribute('data-lang') !== lang; });
+    document.querySelectorAll('[data-set]').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-set') === lang ? 'true' : 'false');
+    });
+    document.documentElement.lang = lang;
+  }
+  document.querySelectorAll('[data-set]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var l = b.getAttribute('data-set');
+      show(l);
+      try { history.replaceState(null, '', '#' + l); } catch (e) {}
+      try { window.scrollTo(0, 0); } catch (e) {}
+    });
+  });
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+  var start = '';
+  try { start = location.hash.slice(1); } catch (e) {}
+  show(start);
+})();
+</script>
