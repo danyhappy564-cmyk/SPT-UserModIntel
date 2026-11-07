@@ -9,8 +9,6 @@ SPT(Single Player Tarkov)용 **다른 사람이 만든 모드**를 직접 풀어
 - FPS 같은 수치는 따로 측정했다고 적힌 경우에만 측정한 값입니다.
 - 각 보고서는 한국어·영어 전환 버튼이 있는 웹페이지입니다.
 
-**웹사이트로 보기: https://danyhappy564-cmyk.github.io/SPT-UserModIntel/**
-
 ## 보고서 목록
 
 | 날짜 | 모드 | 게임 빌드 | 한 줄 결론 |

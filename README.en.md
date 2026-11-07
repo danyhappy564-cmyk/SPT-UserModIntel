@@ -9,8 +9,6 @@ Each review explains what a mod actually does, its pros and cons, and whether it
 - Numbers such as FPS are measured only where a review says so.
 - Each review is a web page with a Korean / English switch.
 
-**View the site: https://danyhappy564-cmyk.github.io/SPT-UserModIntel/**
-
 ## Reviews
 
 | Date | Mods | Game build | Verdict |
