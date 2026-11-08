@@ -15,9 +15,9 @@ SPT(Single Player Tarkov)용 **다른 사람이 만든 모드**를 직접 풀어
 |---|---|---|---|
 | 2026-11-07 | [FuckThisCulling 0.4.1 · Fuck These Optics 0.3.2](https://danyhappy564-cmyk.github.io/SPT-UserModIntel/reports/2026-11-07-FuckThisCulling-FuckTheseOptics/#ko) | SPT 4.1 (EFT 0.16.9.40743) | 둘 다 그리기만 바꾸는 모드. SAIN과 함께 사용 가능, Fuck These Optics는 PiP-Disabler와 함께 쓰지 말 것 |
 
-## 우리 포팅·수정 모드 변경 기록
+## zzap 모드 변경 기록 (오리지널 · 변형 · 포팅)
 
-SPT 4.1용으로 포팅하거나 고친 모드 35개의 날짜별 변경점, 강화한 점, 한국어·영어 설명서 여부를 모은 페이지입니다(한/영 전환, 휴대폰용).
+오리지널 6개, 변형 17개, 포팅 15개(총 38개)를 탭으로 나눠 날짜별 변경점, 강화한 점, 설명서·게임 안 언어(한국어만/영어만/둘 다)를 모은 페이지입니다(한/영 전환, 휴대폰용).
 요청이 있을 때만 갱신합니다 — 기준일은 페이지 맨 위에 적혀 있습니다.
 
 | 페이지 | 용도 |
