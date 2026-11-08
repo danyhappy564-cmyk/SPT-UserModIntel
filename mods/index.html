@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>포팅 모드 변경 기록</title>
+<meta name="description" content="SPT 4.1 포팅·수정 모드의 날짜별 변경점, 강화한 점, 한국어·영어 설명서 여부 정리">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="topbar">
+    <span class="kicker" data-t="kicker"></span>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-v="ko">한국어</button>
+      <button type="button" data-v="en">English</button>
+    </div>
+  </div>
+  <h1 data-t="title"></h1>
+  <p class="lede" data-t="lede"></p>
+  <p class="asof" data-t="asof"></p>
+  <div class="notice"><span data-t="notice1"></span><span data-t="notice2"></span></div>
+</header>
+
+<section class="stats" aria-label="summary">
+  <div class="stat"><b id="st-mods"></b><span data-t="sMods"></span></div>
+  <div class="stat"><b id="st-en"></b><span data-t="sEn"></span></div>
+  <div class="stat"><b id="st-ko"></b><span data-t="sKo"></span></div>
+  <div class="stat"><b id="st-game"></b><span data-t="sGame"></span></div>
+</section>
+
+<details class="legend">
+  <summary data-t="legend"></summary>
+  <ul>
+    <li><span class="pill ok" data-t="docs2"></span><span data-t="lgDocs2"></span></li>
+    <li><span class="pill mid" data-t="docs1"></span><span data-t="lgDocs1"></span></li>
+    <li><span class="pill ok" data-t="inKo"></span><span data-t="lgKo"></span></li>
+    <li><span data-t="lgV"></span></li>
+  </ul>
+</details>
+
+<div class="controls">
+  <div class="seg" role="group"><span class="lbl" data-t="sortLbl"></span>
+    <button type="button" data-sort data-v="start" data-t="sortStart"></button>
+    <button type="button" data-sort data-v="last" data-t="sortLast"></button>
+  </div>
+  <div class="seg" role="group"><span class="lbl" data-t="fLbl"></span>
+    <button type="button" data-f data-v="all" data-t="fAll"></button>
+    <button type="button" data-f data-v="c" data-t="fC"></button>
+    <button type="button" data-f data-v="s" data-t="fS"></button>
+  </div>
+</div>
+
+<main class="list" id="list"></main>
+
+<footer>
+  <span data-t="foot1"></span>
+  <span data-t="foot2"></span>
+  <span><span data-t="src"></span>: <a href="https://github.com/danyhappy564-cmyk/SPT-UserModIntel">github.com/danyhappy564-cmyk/SPT-UserModIntel</a></span>
+</footer>
+</div>
+<script>window.SHOW_DL = true;</script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

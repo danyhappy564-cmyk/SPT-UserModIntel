@@ -14,3 +14,14 @@ Each review explains what a mod actually does, its pros and cons, and whether it
 | Date | Mods | Game build | Verdict |
 |---|---|---|---|
 | 2026-11-07 | [FuckThisCulling 0.4.1 · Fuck These Optics 0.3.2](https://danyhappy564-cmyk.github.io/SPT-UserModIntel/reports/2026-11-07-FuckThisCulling-FuckTheseOptics/#en) | SPT 4.1 (EFT 0.16.9.40743) | Both only change rendering. Fine with SAIN; do not combine Fuck These Optics with PiP-Disabler |
+
+## Our ported & edited mods — change log
+
+Date-ordered changes, improvements and Korean/English guide status for the 35 mods we ported to or fixed for SPT 4.1 (Korean/English switch, phone-friendly).
+Updated only on request — the as-of date is at the top of the page.
+
+| Page | Use |
+|---|---|
+| [With download links](https://danyhappy564-cmyk.github.io/SPT-UserModIntel/mods/#en) | For GitHub / Discord — release and original links per mod |
+| [Without download links](https://danyhappy564-cmyk.github.io/SPT-UserModIntel/mods/arca.html#en) | For the Arca Live channel — content only, no external links |
+
