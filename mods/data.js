@@ -1314,50 +1314,6 @@ window.MODS = [
   "lang": "both"
 },
 {
-  "n": "Project HANA-VI 4.1",
-  "a": "HANA_VI (공동 작업 · co-op)",
-  "side": "s",
-  "s": "2026-09-11",
-  "docsEn": true,
-  "lang": "both",
-  "v": "game",
-  "kind": "p",
-  "repo": "Project-HANA-VI-4.1",
-  "orig": "https://arca.live/u/@HANA_VI",
-  "langNote": {
-    "ko": "일부 팩은 영어 이름만 있음",
-    "en": "Some packs have English names only"
-  },
-  "what": {
-    "ko": "HANA_VI 님의 SPT 3.11 모드팩(아이템·탄약 등)을 SPT 4.1.5로 옮기는 공동 작업입니다.",
-    "en": "Joint port of HANA_VI's SPT 3.11 modpack (items, ammo…) to SPT 4.1.5."
-  },
-  "plus": {
-    "ko": [
-      "TypeScript → C#으로 다시 씀(4.0부터 서버 언어가 바뀌어서)",
-      "코드와 설정 데이터를 나눠 HANA_VI 님이 프로그램 설치 없이 수치를 고칠 수 있게 함",
-      "설정 편집기와 '패처' 기능 추가"
-    ],
-    "en": [
-      "Rewritten from TypeScript to C# (SPT servers changed language in 4.0)",
-      "Code and data split so HANA_VI can tune values without installing anything",
-      "Settings editor with a 'patcher' feature"
-    ]
-  },
-  "tl": [
-    [
-      "2026-09-11",
-      "SPT 4.1.5 포팅 작업 시작",
-      "Started SPT 4.1.5 port"
-    ],
-    [
-      "2026-10-02",
-      "실제 4.1 서버에서 켜지지 않던 문제·아이템이 빠지던 문제 수정, 설정 편집기·패처 추가",
-      "Fixed server not starting and missing items on a real 4.1 server; editor and patcher added"
-    ]
-  ]
-},
-{
   "n": "Tushonka Cleaner",
   "a": "CactusPie · matsix · EchoStarz (+ Tyrian 착상 · idea)",
   "side": "cs",

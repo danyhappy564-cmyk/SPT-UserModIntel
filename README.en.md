@@ -17,7 +17,7 @@ Each review explains what a mod actually does, its pros and cons, and whether it
 
 ## zzap mods change log (original · variant · port)
 
-6 original, 17 variant and 15 ported mods (38 total) in tabs, with date-ordered changes, improvements, and guide / in-game languages (Korean only, English only, or both). Korean/English switch, phone-friendly.
+6 original, 17 variant and 14 ported mods (37 total) in tabs, with date-ordered changes, improvements, and guide / in-game languages (Korean only, English only, or both). Korean/English switch, phone-friendly.
 Updated only on request — the as-of date is at the top of the page.
 
 | Page | Use |
