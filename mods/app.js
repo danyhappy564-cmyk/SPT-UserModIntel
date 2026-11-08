@@ -122,12 +122,10 @@
     var links = null;
     if (SHOW_DL) {
       links = el("div", { cls: "links" }, [
-        m.dlDiscord ? el("span", { cls: "btn static", text: t.discord }) : el("a", { cls: "btn primary", href: OWNER + m.repo + "/releases", rel: "noopener", target: "_blank", text: t.dl }),
+        m.dlDiscord ? null : el("a", { cls: "btn primary", href: OWNER + m.repo + "/releases", rel: "noopener", target: "_blank", text: t.dl }),
         m.orig ? el("a", { cls: "btn", href: m.orig, rel: "noopener", target: "_blank", text: t.orig }) : null,
         m.donate ? el("a", { cls: "btn", href: "https://buymeacoffee.com/real_feels", rel: "noopener", target: "_blank", text: t.donate }) : null
       ]);
-    } else if (m.dlDiscord) {
-      links = el("div", { cls: "links" }, [el("span", { cls: "btn static", text: t.discord })]);
     }
     return el("article", { cls: "card" }, [
       el("h3", { text: m.n }), meta, tags, langNote,
