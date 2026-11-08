@@ -23,7 +23,7 @@
       docs2: "설명서 한·영", docs1: "설명서 한국어 + 원작 영어",
       lang: { ko: "게임 안: 한국어만", en: "게임 안: 영어만", both: "게임 안: 한국어·영어", multi: "게임 안: 여러 언어", none: "게임 안 글자 없음" },
       lgLang: "게임 안(설정 창·문구)에 쓰인 언어 — 한국어만 / 영어만 / 한국어·영어(게임 언어나 설정을 따라 바뀜) / 여러 언어 / 보이는 글자 없음",
-      discord: "디스코드에서만 배포합니다", donate: "후원", maker: "제작자",
+      discord: "디스코드에서만 배포합니다", donate: "후원", site: "소개 페이지", maker: "제작자",
       v: { game: "게임에서 확인됨", part: "일부 게임 확인", server: "서버에서 확인(게임 화면 미확인)", build: "빌드만 확인(게임 미확인)", none: "확인 기록 없음" },
       author: "원작자", period: "작업 기간", plus: "강화한 점", plusO: "주요 기능", tl: "날짜별 변경",
       pre: "원본 모드를 먼저 설치한 뒤 이 판을 덮어써야 작동합니다.", preLink: "원본 모드 받기",
@@ -51,7 +51,7 @@
       docs2: "Guide KO · EN", docs1: "Guide KO + original EN",
       lang: { ko: "In game: Korean only", en: "In game: English only", both: "In game: Korean · English", multi: "In game: several languages", none: "No in-game text" },
       lgLang: "Language of in-game text (settings, messages) — Korean only / English only / Korean · English (follows game or setting) / several / no visible text",
-      discord: "Distributed on Discord only", donate: "Donate", maker: "Made by",
+      discord: "Distributed on Discord only", donate: "Donate", site: "Project page", maker: "Made by",
       v: { game: "Confirmed in game", part: "Partly confirmed in game", server: "Confirmed on server (game screen unchecked)", build: "Build only (not checked in game)", none: "No check recorded" },
       author: "Original author", period: "Work period", plus: "What we improved", plusO: "Main features", tl: "Changes by date",
       pre: "Install the original mod first, then extract this build over it.", preLink: "Get the original mod",
@@ -122,10 +122,14 @@
     var links = null;
     if (SHOW_DL) {
       links = el("div", { cls: "links" }, [
+        m.site ? el("a", { cls: "btn", href: m.site.main + (L === "en" ? "?lang=en" : "?lang=ko"), rel: "noopener", target: "_blank", text: t.site }) : null,
         m.dlDiscord ? null : el("a", { cls: "btn primary", href: OWNER + m.repo + "/releases", rel: "noopener", target: "_blank", text: t.dl }),
         m.orig ? el("a", { cls: "btn", href: m.orig, rel: "noopener", target: "_blank", text: t.orig }) : null,
         m.donate ? el("a", { cls: "btn", href: "https://buymeacoffee.com/real_feels", rel: "noopener", target: "_blank", text: t.donate }) : null
       ]);
+    }
+    if (!SHOW_DL && m.site) {
+      links = el("div", { cls: "links" }, [el("a", { cls: "btn primary", href: m.site.arca + (L === "en" ? "?lang=en" : "?lang=ko"), rel: "noopener", target: "_blank", text: t.site })]);
     }
     return el("article", { cls: "card" }, [
       el("h3", { text: m.n }), meta, tags, langNote,

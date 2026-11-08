@@ -3,11 +3,12 @@
    필드: n 이름 · a 원작자 · kind o=오리지널 v=변형 p=포팅 · side c=게임(클라이언트) s=서버 cs=둘 다 t=별도 프로그램 · s 시작일 ·
    docsEn 영어 설명서 있음 · lang 게임 안 글자(ko 한국어만/en 영어만/both 한·영/multi 여러 언어/none 글자 없음) · langNote 언어 보충 ·
    v 확인 상태(game/part/server/build/none) · repo 우리 저장소 · orig 원작 주소 · pre 원본 선설치(주소) · dlDiscord 디스코드에서만 배포 ·
-   donate 후원 버튼(오리지널 중 남의 코드를 안 쓴 것만 — 나랏말싸미 제외, 사용자 2026-11-08) · note 덧붙임 · what 하는 일 · plus 강화한 점 · tl 날짜별 변경 [날짜, 한국어, English] */
+   donate 후원 버튼(오리지널 중 남의 코드를 안 쓴 것만 — 나랏말싸미 제외, 사용자 2026-11-08) · note 덧붙임 · site 소개 페이지{main 다운로드판용, arca 아카판용} · what 하는 일 · plus 강화한 점 · tl 날짜별 변경 [날짜, 한국어, English] */
 
 window.MODS_UPDATED = "2026-11-08";
 window.MODS = [
 {
+  "site": {"main": "https://danyhappy564-cmyk.github.io/SAIN-zzap--Bootleg-/", "arca": "https://danyhappy564-cmyk.github.io/SAIN-zzap--Bootleg-/arca/"},
   "n": "SAIN (zzap)",
   "a": "Solarint · ArchangelWTF",
   "side": "cs",
@@ -1314,6 +1315,7 @@ window.MODS = [
   "lang": "both"
 },
 {
+  "site": {"main": "https://danyhappy564-cmyk.github.io/Tushonka-Cleaner/", "arca": "https://danyhappy564-cmyk.github.io/Tushonka-Cleaner/arca/"},
   "n": "Tushonka Cleaner",
   "a": "CactusPie · matsix · EchoStarz (+ Tyrian 착상 · idea)",
   "side": "cs",
